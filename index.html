@@ -48,16 +48,34 @@
   <!-- PRACTICE TAB -->
   <div id="practice" class="tab">
     <h2>Practice Mode</h2>
-    <div id="problem"></div>
-    <input id="answer" autocomplete="off">
-    <button onclick="submitAnswer()">Submit</button>
+
+    <div class="controls">
+      <label for="curveball-select">Curveball Type:</label>
+      <select id="curveball-select">
+        <option value="mix">Mixed</option>
+        <option value="1">Curveball 1</option>
+        <option value="2">Curveball 2</option>
+        <option value="3">Curveball 3</option>
+        <option value="4">Curveball 4</option>
+        <option value="5">Curveball 5</option>
+      </select>
+      <button id="new-problem">New Problem</button>
+    </div>
+
+    <div id="problem-text"></div>
+
+    <div class="answer-row">
+      <input id="answer-input" autocomplete="off">
+      <button id="check-answer">Check</button>
+    </div>
+
     <div id="feedback"></div>
   </div>
 
   <!-- EXPLANATIONS TAB -->
   <div id="explanations" class="tab">
     <h2>Explanations</h2>
-    <div id="explain-content">
+    <div id="explanation-content">
       Select a curveball type in Practice Mode to see explanations here.
     </div>
   </div>
@@ -65,13 +83,28 @@
   <!-- TIMED MODE TAB -->
   <div id="timed" class="tab">
     <h2>Timed Mode</h2>
-    <div id="timed-problem"></div>
-    <input id="timed-answer" autocomplete="off">
-    <button onclick="submitTimed()">Submit</button>
-    <div id="timed-feedback"></div>
-    <div id="timed-score">Score: 0</div>
-    <div id="timer">Time: 120</div>
-    <button onclick="startTimed()">Start</button>
+
+    <div class="checkboxes">
+      <label><input type="checkbox" class="cb" value="1"> Curveball 1</label>
+      <label><input type="checkbox" class="cb" value="2"> Curveball 2</label>
+      <label><input type="checkbox" class="cb" value="3"> Curveball 3</label>
+      <label><input type="checkbox" class="cb" value="4"> Curveball 4</label>
+      <label><input type="checkbox" class="cb" value="5"> Curveball 5</label>
+    </div>
+
+    <button id="start-timed">Start Timed Mode</button>
+
+    <div id="timed-area" style="display:none; margin-top:20px;">
+      <div id="timer">2:00</div>
+      <div id="timed-score">Score: 0</div>
+
+      <div id="timed-problem"></div>
+
+      <input id="timed-answer" autocomplete="off">
+      <button id="timed-submit">Submit</button>
+
+      <div id="timed-feedback"></div>
+    </div>
   </div>
 
   <!-- TAB SWITCHING SCRIPT -->
@@ -88,8 +121,8 @@
       document.getElementById(tabName).classList.add("active");
       document.querySelector(`.tab-button[data-tab="${tabName}"]`).classList.add("active");
 
-      if (tabName === "practice") {
-        newProblem();
+      if (tabName === "explanations") {
+        loadExplanations();
       }
     }
 
