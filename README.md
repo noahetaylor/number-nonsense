@@ -44,7 +44,7 @@ Stony Point High School — UIL Number Sense Team 2026
 
 ## 🌐 Live Website
 Hosted via GitHub Pages:  
-https://<noahetaylor>.github.io/number-nonsense/
+https://noahetaylor.github.io/number-nonsense/
 
 ---
 
