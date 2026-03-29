@@ -13,9 +13,65 @@
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+  <style>
+    /* Basic layout fixes so tabs display correctly */
+    .tab { display: none; }
+    .tab.active { display: block; }
+
+    .tab-button.active {
+      background: #333;
+      color: white;
+    }
+
+    /* Stylized Intro Page */
+    .intro-tab {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .intro-title {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .intro-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .highlight {
+      color: #d18f00;
+      font-weight: bold;
+    }
+
+    .intro-school {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .intro-divider {
+      width: 60%;
+      height: 3px;
+      background: #d18f00;
+      margin: 20px auto;
+      border-radius: 2px;
+    }
+
+    .intro-text {
+      font-size: 1.15rem;
+      max-width: 700px;
+      margin: 15px auto;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 
 <body>
+
+  <!-- TAB BUTTONS -->
   <div class="tabs">
     <button class="tab-button active" data-tab="intro">Intro</button>
     <button class="tab-button" data-tab="practice">Practice</button>
@@ -71,6 +127,32 @@
     <div id="timer">Time: 120</div>
     <button onclick="startTimed()">Start</button>
   </div>
+
+  <!-- TAB SWITCHING SCRIPT -->
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll(".tab").forEach(tab => {
+        tab.classList.remove("active");
+      });
+
+      document.querySelectorAll(".tab-button").forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      document.getElementById(tabName).classList.add("active");
+      document.querySelector(`.tab-button[data-tab="${tabName}"]`).classList.add("active");
+
+      if (tabName === "practice") {
+        newProblem();
+      }
+    }
+
+    document.querySelectorAll(".tab-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        switchTab(btn.dataset.tab);
+      });
+    });
+  </script>
 
   <script src="main.js"></script>
 </body>
