@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UIL Number Sense Curveballs</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- MathJax for real math formatting -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+  <div class="tabs">
+    <button class="tab-button active" data-tab="practice">Practice</button>
+    <button class="tab-button" data-tab="explanations">Explanations</button>
+    <button class="tab-button" data-tab="timed">Timed Mode</button>
+  </div>
+
+  <!-- PRACTICE TAB -->
+  <div id="practice" class="tab active">
+    <h1>UIL Curveball Practice</h1>
+
+    <div class="controls">
+      <label>
+        Curveball:
+        <select id="curveball-select">
+          <option value="1">Curveball 1 – Fraction Trick</option>
+          <option value="2">Curveball 2 – Permutations & Inequalities</option>
+          <option value="3">Curveball 3 – Digit Sum</option>
+          <option value="4">Curveball 4 – Product ∏</option>
+          <option value="5">Curveball 5 – nPr / nCr Relation</option>
+          <option value="mix">Mixed</option>
+        </select>
+      </label>
+    </div>
+
+    <div id="problem-box">
+      <div id="problem-text"></div>
+    </div>
+
+    <div class="answer-row">
+      <input id="answer-input" placeholder="Enter answer">
+      <button id="check-answer">Check</button>
+    </div>
+
+    <div id="feedback"></div>
+  </div>
+
+  <!-- EXPLANATIONS TAB -->
+  <div id="explanations" class="tab">
+    <h1>Curveball Explanations</h1>
+    <div id="explanation-content"></div>
+  </div>
+
+  <!-- TIMED MODE TAB -->
+  <div id="timed" class="tab">
+    <h1>Timed Mode (2 minutes)</h1>
+
+    <div class="checkboxes">
+      <label><input type="checkbox" class="cb" value="1"> Curveball 1</label>
+      <label><input type="checkbox" class="cb" value="2"> Curveball 2</label>
+      <label><input type="checkbox" class="cb" value="3"> Curveball 3</label>
+      <label><input type="checkbox" class="cb" value="4"> Curveball 4</label>
+      <label><input type="checkbox" class="cb" value="5"> Curveball 5</label>
+    </div>
+
+    <button id="start-timed">Start</button>
+
+    <div id="timed-area" style="display:none;">
+      <div id="timer">2:00</div>
+      <div id="timed-problem"></div>
+      <input id="timed-answer" placeholder="Answer">
+      <button id="timed-submit">Submit</button>
+      <div id="timed-feedback"></div>
+      <div id="timed-score"></div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
