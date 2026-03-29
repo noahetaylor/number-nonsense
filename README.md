@@ -5,6 +5,8 @@ A fast, intuitive, and competition‑ready training platform for mastering UIL N
 Built by **Noah Taylor**  
 Stony Point High School — UIL Number Sense Team 2026
 
+https://noahetaylor.github.io/number-nonsense/
+
 ---
 
 ## 🚀 Features
