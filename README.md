@@ -44,3 +44,26 @@ Stony Point High School — UIL Number Sense Team 2026
 
 ## 🌐 Live Website
 Hosted via GitHub Pages:  
+https://<noahetaylor>.github.io/number-nonsense/
+
+---
+
+## 🛠️ Tech Stack
+- HTML  
+- CSS  
+- JavaScript  
+- MathJax (for clean math rendering)  
+- GitHub Pages (hosting)
+
+---
+
+## 📄 License
+MIT License — feel free to use, modify, and learn from this project with attribution.
+
+---
+
+## ✨ Credits
+Created by **Noah Taylor**  
+Stony Point High School — UIL Number Sense Team 2026
+
+Designed for competitors. Built for champions.
