@@ -273,24 +273,26 @@ function generateCurveball6() {
   if (slope === -1) {
     // y = -x + c
     if (askHK) {
+      // h + k = -p - q + 2c
       const val = -p - q + 2 * c;
       text = `The point (${p}, ${q}) is reflected across the line \\(y = -x ${c>=0?'+':''}${c}\\). Find \\(h+k\\).`;
       answer = { type: "int", value: val };
     } else {
-      const val = -(p - q);
+      // h - k = p - q
+      const val = p - q;
       text = `The point (${p}, ${q}) is reflected across the line \\(y = -x ${c>=0?'+':''}${c}\\). Find \\(h-k\\).`;
       answer = { type: "int", value: val };
     }
-  }
-
-  else {
+  } else {
     // y = x + c
     if (!askHK) {
+      // h - k = -p + q + 2c
       const val = -p + q + 2 * c;
       text = `The point (${p}, ${q}) is reflected across the line \\(y = x ${c>=0?'+':''}${c}\\). Find \\(h-k\\).`;
       answer = { type: "int", value: val };
     } else {
-      const val = -(p + q);
+      // h + k = p + q
+      const val = p + q;
       text = `The point (${p}, ${q}) is reflected across the line \\(y = x ${c>=0?'+':''}${c}\\). Find \\(h+k\\).`;
       answer = { type: "int", value: val };
     }
@@ -298,6 +300,7 @@ function generateCurveball6() {
 
   return { text, answer };
 }
+
 
 /****************************************************
  * REGISTRY
@@ -382,13 +385,13 @@ const explanations = `
 <p><strong>For the line</strong> \\(y = -x + c\\):</p>
 <ul>
   <li>\\(h+k = -p - q + 2c\\)</li>
-  <li>\\(h-k = -(p - q)\\)</li>
+  <li>\\(h-k = p - q\\)</li>
 </ul>
 
 <p><strong>For the line</strong> \\(y = x + c\\):</p>
 <ul>
   <li>\\(h-k = -p + q + 2c\\)</li>
-  <li>\\(h+k = -(p + q)\\)</li>
+  <li>\\(h+k = p + q\\)</li>
 </ul>
 `;
 
