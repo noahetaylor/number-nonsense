@@ -257,7 +257,7 @@ function generateCurveball5() {
 }
 
 /****************************************************
- * CURVEBALL 6 — REFLECTION ACROSS LINE
+ * CURVEBALL 6 — REFLECTION ACROSS LINE (ALL 4 CASES)
  ****************************************************/
 function generateCurveball6() {
   const p = randInt(-20, 20);
@@ -271,17 +271,29 @@ function generateCurveball6() {
   let text, answer;
 
   if (slope === -1) {
-    const val = -p - q + 2 * c;
-
-    text = `The point (${p}, ${q}) is reflected across the line \\(y = -x ${c>=0?'+':''}${c}\\). Find \\(h+k\\).`;
-    answer = { type: "int", value: val };
+    // y = -x + c
+    if (askHK) {
+      const val = -p - q + 2 * c;
+      text = `The point (${p}, ${q}) is reflected across the line \\(y = -x ${c>=0?'+':''}${c}\\). Find \\(h+k\\).`;
+      answer = { type: "int", value: val };
+    } else {
+      const val = -(p - q);
+      text = `The point (${p}, ${q}) is reflected across the line \\(y = -x ${c>=0?'+':''}${c}\\). Find \\(h-k\\).`;
+      answer = { type: "int", value: val };
+    }
   }
 
   else {
-    const val = -p + q + 2 * c;
-
-    text = `The point (${p}, ${q}) is reflected across the line \\(y = x ${c>=0?'+':''}${c}\\). Find \\(h-k\\).`;
-    answer = { type: "int", value: val };
+    // y = x + c
+    if (!askHK) {
+      const val = -p + q + 2 * c;
+      text = `The point (${p}, ${q}) is reflected across the line \\(y = x ${c>=0?'+':''}${c}\\). Find \\(h-k\\).`;
+      answer = { type: "int", value: val };
+    } else {
+      const val = -(p + q);
+      text = `The point (${p}, ${q}) is reflected across the line \\(y = x ${c>=0?'+':''}${c}\\). Find \\(h+k\\).`;
+      answer = { type: "int", value: val };
+    }
   }
 
   return { text, answer };
@@ -367,8 +379,17 @@ const explanations = `
 <p>\\( nP r = r! \\cdot nC r \\)</p>
 
 <h2>Reflection Across Line</h2>
-<p>For \\(y = -x + c\\): \\(h+k = -p - q + 2c\\).</p>
-<p>For \\(y = x + c\\): \\(h-k = -p + q + 2c\\).</p>
+<p><strong>For the line</strong> \\(y = -x + c\\):</p>
+<ul>
+  <li>\\(h+k = -p - q + 2c\\)</li>
+  <li>\\(h-k = -(p - q)\\)</li>
+</ul>
+
+<p><strong>For the line</strong> \\(y = x + c\\):</p>
+<ul>
+  <li>\\(h-k = -p + q + 2c\\)</li>
+  <li>\\(h+k = -(p + q)\\)</li>
+</ul>
 `;
 
 function loadExplanations() {
