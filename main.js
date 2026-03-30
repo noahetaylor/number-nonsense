@@ -231,7 +231,6 @@ function generateCurveball5() {
   const form = forms[randInt(0, forms.length - 1)];
   const rf = factorial(r);
 
-  // clean UIL-style formatting: nP_r and nC_r
   const nPr = `${n}P_{${r}}`;
   const nCr = `${n}C_{${r}}`;
   const nCnr = `${n}C_{${n - r}}`;
@@ -239,17 +238,14 @@ function generateCurveball5() {
   let text, ans;
 
   if (form === "A") {
-    // nP_r = k * nC_r
     text = `\\( ${nPr} = k \\cdot ${nCr} \\)`;
     ans = rf;
   } 
   else if (form === "B") {
-    // k * nP_r = nC_r
     text = `\\( k \\cdot ${nPr} = ${nCr} \\)`;
     ans = 1 / rf;
   } 
   else {
-    // nP_r = k * nC_(n-r)
     text = `\\( ${nPr} = k \\cdot ${nCnr} \\)`;
     ans = rf;
   }
@@ -260,9 +256,36 @@ function generateCurveball5() {
   };
 }
 
+/****************************************************
+ * CURVEBALL 6 — REFLECTION ACROSS LINE
+ ****************************************************/
+function generateCurveball6() {
+  const p = randInt(-20, 20);
+  const q = randInt(-20, 20);
 
+  const slope = Math.random() < 0.5 ? 1 : -1;
+  const c = randInt(-10, 10);
 
+  const askHK = Math.random() < 0.5;
 
+  let text, answer;
+
+  if (slope === -1) {
+    const val = -p - q + 2 * c;
+
+    text = `The point (${p}, ${q}) is reflected across the line \\(y = -x ${c>=0?'+':''}${c}\\). Find \\(h+k\\).`;
+    answer = { type: "int", value: val };
+  }
+
+  else {
+    const val = -p + q + 2 * c;
+
+    text = `The point (${p}, ${q}) is reflected across the line \\(y = x ${c>=0?'+':''}${c}\\). Find \\(h-k\\).`;
+    answer = { type: "int", value: val };
+  }
+
+  return { text, answer };
+}
 
 /****************************************************
  * REGISTRY
@@ -272,7 +295,8 @@ const generators = {
   2: generateCurveball2,
   3: generateCurveball3,
   4: generateCurveball4,
-  5: generateCurveball5
+  5: generateCurveball5,
+  6: generateCurveball6
 };
 
 let currentProblem = null;
@@ -315,7 +339,7 @@ function checkAnswer() {
     fb.textContent = "Correct.";
     fb.className = "correct";
 
-    setTimeout(newProblem, 300);  // auto-advance
+    setTimeout(newProblem, 300);
   } else {
     fb.textContent = "Incorrect.";
     fb.className = "incorrect";
@@ -326,21 +350,25 @@ function checkAnswer() {
  * EXPLANATIONS TAB
  ****************************************************/
 const explanations = `
-<h2>Curveball 1 — Fraction Trick</h2>
+<h2>Fraction Trick</h2>
 <p>\\( \\frac{a}{b} - \\frac{na-1}{nb+1} = \\frac{a+b}{b(nb+1)} \\)</p>
 <p>\\( \\frac{a}{b} - \\frac{na+1}{nb-1} = -\\frac{a+b}{b(nb-1)} \\)</p>
 
-<h2>Curveball 2 — Permutations & Inequalities</h2>
+<h2>Permutation Inequality</h2>
 <p>Count all permutations of the digits, then filter by the inequality.</p>
 
-<h2>Curveball 3 — Digit Sum</h2>
+<h2>Digit Sum Parabola</h2>
 <p>Use triangular numbers and the middle parabola formula.</p>
 
-<h2>Curveball 4 — Product ∏</h2>
+<h2>Shifted Product</h2>
 <p>Expand the product; it always becomes a shifted factorial.</p>
 
-<h2>Curveball 5 — nPr / nCr Relation</h2>
+<h2>nPr / nCr Ratio</h2>
 <p>\\( nP r = r! \\cdot nC r \\)</p>
+
+<h2>Reflection Across Line</h2>
+<p>For \\(y = -x + c\\): \\(h+k = -p - q + 2c\\).</p>
+<p>For \\(y = x + c\\): \\(h-k = -p + q + 2c\\).</p>
 `;
 
 function loadExplanations() {
@@ -410,12 +438,11 @@ function submitTimed() {
     fb.textContent = "Correct.";
     fb.className = "correct";
     document.getElementById("timed-score").textContent = `Score: ${timedScore}`;
-    nextTimedProblem();   // only advance on correct
-    } else {
+    nextTimedProblem();
+  } else {
     fb.textContent = "Incorrect.";
     fb.className = "incorrect";
-    // DO NOT advance — stay on the same problem
-    }
+  }
 }
 
 /****************************************************
