@@ -141,11 +141,13 @@ button:hover {
 
 .uil-problem {
   margin-bottom: 6px;
+  display: flex;
+  align-items: center;
 }
 
 .uil-problem-number {
   font-weight: 600;
-  margin-right: 4px;
+  margin-right: 6px;
 }
 
 /* Answer key */
@@ -202,6 +204,8 @@ button:hover {
     border: none;
     margin: 0;
     page-break-after: always;
+    font-family: "Times New Roman", serif;
+    font-size: 12pt;
   }
 
   .answer-key {
@@ -265,9 +269,15 @@ button:hover {
 }
 
 .uil-blank {
-  display: inline-block;
+  flex: 1 1 auto;
   border-bottom: 1px solid #000;
-  width: 120px;
   margin-left: 8px;
 }
+
+.uil-problem-text {
+  flex: 0 1 auto;
+  margin-right: 8px;
+}
+
+
 
