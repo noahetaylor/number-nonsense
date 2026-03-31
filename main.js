@@ -905,7 +905,7 @@ function generateQ9() {
     const n = d * q + r;
 
     return {
-      text: `${n} : ${d} = (mixed number)`,
+      text: `${n} ÷ ${d} = (mixed number)`,
       answer: { type: "frac", value: { num: n, den: d } }
     };
   }
@@ -917,7 +917,7 @@ function generateQ9() {
   const n = d * q + r;
 
   return {
-    text: `${n} : ${d} = (mixed number)`,
+    text: `${n} ÷ ${d} = (mixed number)`,
     answer: { type: "frac", value: { num: n, den: d } }
   };
 }
