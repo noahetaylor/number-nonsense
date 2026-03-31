@@ -591,7 +591,7 @@ function generateQ2() {
 
     return {
       text: `${n1.toFixed(2)} - ${n2.toFixed(2)} =`,
-      answer: { type: "int", value: null, num: n1 - n2 }
+      answer: { type: "decimal", value: (n1 - n2).toFixed(2) }
     };
   }
 
@@ -605,7 +605,7 @@ function generateQ2() {
 
   return {
     text: `${n1.toFixed(3)} + ${n2.toFixed(2)} =`,
-    answer: { type: "int", value: null, num: n1 + n2 }
+    answer: { type: "decimal", value: (n1 + n2).toFixed(3) }
   };
 }
 
