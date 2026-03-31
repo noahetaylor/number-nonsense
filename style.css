@@ -85,6 +85,134 @@ button:hover {
   color: #f87171;
 }
 
+/* TEST GENERATOR LAYOUT */
+.testgen-controls {
+  margin-bottom: 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#testgen-container {
+  background: #0f172a;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+/* UIL pages */
+.uil-page {
+  background: #ffffff;
+  color: #000000;
+  padding: 16px 24px;
+  margin-bottom: 24px;
+  border: 1px solid #cbd5e1;
+  page-break-after: always;
+}
+
+.uil-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.uil-subheader {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.uil-stop {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.uil-columns {
+  display: flex;
+  gap: 32px;
+}
+
+.uil-column {
+  flex: 1;
+  font-size: 0.95rem;
+}
+
+.uil-problem {
+  margin-bottom: 6px;
+}
+
+.uil-problem-number {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+/* Answer key */
+.answer-key {
+  margin-top: 16px;
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.answer-key-item {
+  margin-bottom: 4px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* PRINT STYLES */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .tabs,
+  .tab-button,
+  .controls,
+  .answer-row,
+  .checkboxes,
+  #start-timed,
+  #timed-submit,
+  #new-problem,
+  #check-answer,
+  .testgen-controls {
+    display: none !important;
+  }
+
+  .tab {
+    display: none !important;
+  }
+
+  #testgen {
+    display: block !important;
+  }
+
+  #testgen-container {
+    background: #ffffff !important;
+    padding: 0;
+  }
+
+  .uil-page {
+    border: none;
+    margin: 0;
+    page-break-after: always;
+  }
+
+  .answer-key {
+    page-break-before: always;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+  }
+}
+
+
 #timer {
   font-size: 1.4rem;
   margin-bottom: 12px;
