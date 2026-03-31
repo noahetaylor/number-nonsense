@@ -23,7 +23,9 @@
     <button class="tab-button" data-tab="practice">Practice</button>
     <button class="tab-button" data-tab="explanations">Explanations</button>
     <button class="tab-button" data-tab="timed">Timed Mode</button>
+    <button class="tab-button" data-tab="testgen">Test Generator</button>
   </div>
+
 
   <!-- INTRO TAB -->
   <div id="intro" class="tab active intro-tab">
@@ -108,6 +110,73 @@
       <div id="timed-feedback"></div>
     </div>
   </div>
+
+
+
+
+
+  <div id="testgen" class="tab">
+  <h2>UIL-Style Test Generator</h2>
+
+  <div class="testgen-controls">
+    <button id="generate-test">Generate Full Test (1–80)</button>
+    <button id="print-test">Print Test</button>
+    <button id="toggle-answer-key">Show Answer Key</button>
+  </div>
+
+  <div id="testgen-container">
+    <!-- Page 1 -->
+    <div class="uil-page">
+      <div class="uil-header">
+        <div class="uil-header-left">
+          <div>Contestant's Number __________</div>
+          <div>Read directions carefully before beginning test</div>
+        </div>
+        <div class="uil-header-right">
+          <div>Final ______</div>
+          <div>Score ______</div>
+        </div>
+      </div>
+      <div class="uil-subheader">
+        DO NOT UNFOLD THIS SHEET UNTIL TOLD TO BEGIN
+      </div>
+      <div class="uil-stop">STOP — WAIT FOR SIGNAL!</div>
+
+      <div class="uil-columns">
+        <div class="uil-column" id="col-1-17"></div>
+        <div class="uil-column" id="col-18-34"></div>
+      </div>
+    </div>
+
+    <!-- Page 2 -->
+    <div class="uil-page">
+      <div class="uil-header">
+        <div class="uil-header-left">
+          <div>Contestant's Number __________</div>
+          <div>Read directions carefully before beginning test</div>
+        </div>
+        <div class="uil-header-right">
+          <div>Final ______</div>
+          <div>Score ______</div>
+        </div>
+      </div>
+      <div class="uil-subheader">
+        DO NOT UNFOLD THIS SHEET UNTIL TOLD TO BEGIN
+      </div>
+      <div class="uil-columns">
+        <div class="uil-column" id="col-35-56"></div>
+        <div class="uil-column" id="col-57-80"></div>
+      </div>
+    </div>
+
+    <!-- Answer key -->
+    <div id="answer-key" class="answer-key hidden">
+      <h3>Answer Key</h3>
+      <div id="answer-key-list"></div>
+    </div>
+  </div>
+</div>
+
 
   <!-- NO INLINE TAB SCRIPT — main.js handles everything -->
   <script src="main.js?v=1"></script>
