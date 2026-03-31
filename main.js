@@ -1019,7 +1019,12 @@ function generateFullTest() {
       const { text, answer } = buildProblemText(n);
       const div = document.createElement("div");
       div.className = "uil-problem";
-      div.innerHTML = `<span class="uil-problem-number">(${n})</span> ${text}`;
+      div.innerHTML = `
+        <span class="uil-problem-number">(${n})</span> 
+        <span class="uil-problem-text">${text}</span>
+        <span class="uil-blank"></span>
+      `;
+
       col.appendChild(div);
 
       answerKey.push({
