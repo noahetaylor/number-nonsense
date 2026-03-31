@@ -49,6 +49,10 @@ function equalAnswers(expected, user) {
     return e.num === u.num && e.den === u.den;
   }
 
+  if (expected.type === "decimal") {
+  return Math.abs((user.num / user.den) - parseFloat(expected.value)) < 1e-9;
+}
+
   return false;
 }
 
@@ -569,7 +573,7 @@ function generateQ2() {
 
     return {
       text: `${n1.toFixed(2)} + ${n2.toFixed(2)} =`,
-      answer: { type: "int", value: null, num: n1 + n2 } // you'll likely treat as decimal string
+      answer: { type: "decimal", value: (n1 + n2).toFixed(2) }
     };
   }
 
@@ -974,7 +978,7 @@ function buildProblemText(n) {
   if (questionGenerators[n]) {
     const q = questionGenerators[n]();
     return {
-      text: q.text.replace(/^\\\(/, "").replace(/\\\)$/, ""),
+      text: q.text,
       answer: q.answer
     };
   }
@@ -994,6 +998,7 @@ function formatAnswer(n, ans) {
     if (s.den === 1) return `${s.num}`;
     return `${s.num}/${s.den}`;
   }
+  if (ans.type === "decimal") return ans.value;
   return `?`;
 }
 
