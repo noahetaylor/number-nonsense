@@ -482,6 +482,561 @@ function switchTab(tab) {
   if (tab === "explanations") loadExplanations();
 }
 
+function generateQ1() {
+  const form = randInt(1, 3);
+
+  if (form === 1) {
+    // abcd + efgh, no carry in tens/ones
+    const a = randInt(1, 9);
+    const b = randInt(0, 9);
+    const c = randInt(0, 9);
+    const d = randInt(0, 4);
+
+    const e = randInt(1, 9);
+    const f = randInt(0, 9);
+    const g = randInt(0, 9);
+    const h = randInt(0, 4);
+
+    if (d + h >= 10 || c + g >= 10) return generateQ1();
+
+    const n1 = 1000 * a + 100 * b + 10 * c + d;
+    const n2 = 1000 * e + 100 * f + 10 * g + h;
+    return {
+      text: `${n1} + ${n2} =`,
+      answer: { type: "int", value: n1 + n2 }
+    };
+  }
+
+  if (form === 2) {
+    // abcd + efg + hij, no carry in tens/ones
+    const a = randInt(1, 9);
+    const b = randInt(0, 9);
+    const c = randInt(0, 4);
+    const d = randInt(0, 4);
+
+    const e = randInt(1, 9);
+    const f = randInt(0, 9);
+    const g = randInt(0, 4);
+
+    const h = randInt(1, 9);
+    const i = randInt(0, 9);
+    const j = randInt(0, 4);
+
+    if (d + g + j >= 10 || c + f + i >= 10) return generateQ1();
+
+    const n1 = 1000 * a + 100 * b + 10 * c + d;
+    const n2 = 100 * e + 10 * f + g;
+    const n3 = 100 * h + 10 * i + j;
+    return {
+      text: `${n1} + ${n2} + ${n3} =`,
+      answer: { type: "int", value: n1 + n2 + n3 }
+    };
+  }
+
+  // form 3: abcd - efg, no borrow in tens/ones
+  const A = randInt(2, 9);
+  const B = randInt(0, 9);
+  const C = randInt(2, 9);
+  const D = randInt(2, 9);
+
+  const E = randInt(1, A - 1);
+  const F = randInt(0, 9);
+  const G = randInt(0, 9);
+
+  const n1 = 1000 * A + 100 * B + 10 * C + D;
+  const n2 = 100 * E + 10 * F + G;
+
+  if (D < G || C < F) return generateQ1();
+
+  return {
+    text: `${n1} - ${n2} =`,
+    answer: { type: "int", value: n1 - n2 }
+  };
+}
+
+function generateQ2() {
+  const form = randInt(1, 3);
+
+  if (form === 1) {
+    // abc.de + fg.hi
+    const abc = randInt(10, 999);
+    const fg = randInt(10, 999);
+    const de = randInt(10, 99);
+    const hi = randInt(10, 99);
+
+    const n1 = abc + de / 100;
+    const n2 = fg + hi / 100;
+
+    return {
+      text: `${n1.toFixed(2)} + ${n2.toFixed(2)} =`,
+      answer: { type: "int", value: null, num: n1 + n2 } // you'll likely treat as decimal string
+    };
+  }
+
+  if (form === 2) {
+    // abc.de - fg.hi with no borrow
+    const abc = randInt(50, 999);
+    const fg = randInt(10, abc - 1);
+    const de = randInt(10, 99);
+    const hi = randInt(10, 99);
+
+    if (de < hi) return generateQ2();
+
+    const n1 = abc + de / 100;
+    const n2 = fg + hi / 100;
+
+    return {
+      text: `${n1.toFixed(2)} - ${n2.toFixed(2)} =`,
+      answer: { type: "int", value: null, num: n1 - n2 }
+    };
+  }
+
+  // form 3: ab.cde + c.de
+  const ab = randInt(10, 99);
+  const c = randInt(1, 9);
+  const de = randInt(10, 99);
+
+  const n1 = ab + c / 10 + de / 1000;
+  const n2 = c + de / 100;
+
+  return {
+    text: `${n1.toFixed(3)} + ${n2.toFixed(2)} =`,
+    answer: { type: "int", value: null, num: n1 + n2 }
+  };
+}
+
+function generateQ3() {
+  const form = randInt(1, 4);
+
+  function makeFracCancel() {
+    const b = randInt(2, 12);
+    const k = randInt(2, 9);
+    const a = k;
+    const d = b * k;
+    return { a, b, c: randInt(2, 12), d };
+  }
+
+  if (form === 1) {
+    // (a/b) × (c/d) with a|d
+    const b = randInt(2, 12);
+    const a = randInt(2, 9);
+    const k = randInt(2, 5);
+    const d = a * k;
+    const c = randInt(2, 12);
+
+    const num = a * c;
+    const den = b * d;
+    const simp = simplifyFraction(num, den);
+
+    return {
+      text: `\\( \\frac{${a}}{${b}} \\times \\frac{${c}}{${d}} = \\)`,
+      answer: { type: "frac", value: simp }
+    };
+  }
+
+  if (form === 2) {
+    // (a/b) × (c/d) with b|c
+    const b = randInt(2, 12);
+    const k = randInt(2, 5);
+    const c = b * k;
+    const a = randInt(2, 9);
+    const d = randInt(2, 12);
+
+    const num = a * c;
+    const den = b * d;
+    const simp = simplifyFraction(num, den);
+
+    return {
+      text: `\\( \\frac{${a}}{${b}} \\times \\frac{${c}}{${d}} = \\)`,
+      answer: { type: "frac", value: simp }
+    };
+  }
+
+  if (form === 3) {
+    // (a/b) ÷ (c/d) with a|c
+    const b = randInt(2, 12);
+    const a = randInt(2, 9);
+    const k = randInt(2, 5);
+    const c = a * k;
+    const d = randInt(2, 12);
+
+    const num = a * d;
+    const den = b * c;
+    const simp = simplifyFraction(num, den);
+
+    return {
+      text: `\\( \\frac{${a}}{${b}} \\div \\frac{${c}}{${d}} = \\)`,
+      answer: { type: "frac", value: simp }
+    };
+  }
+
+  // form 4: (a/b) × (b/a) = 1
+  const a = randInt(2, 9);
+  const b = randInt(2, 9);
+  return {
+    text: `\\( \\frac{${a}}{${b}} \\times \\frac{${b}}{${a}} = \\)`,
+    answer: { type: "int", value: 1 }
+  };
+}
+
+function generateQ4() {
+  const form = randInt(1, 3);
+
+  function toImproper(A, B, C) {
+    return { num: A * C + B, den: C };
+  }
+
+  if (form === 1) {
+    // (A 1/2) × (B 1/2)
+    const A = randInt(2, 15);
+    const B = randInt(2, 15);
+    const f1 = toImproper(A, 1, 2); // (2A+1)/2
+    const f2 = toImproper(B, 1, 2); // (2B+1)/2
+
+    const num = f1.num * f2.num;
+    const den = 4;
+    const simp = simplifyFraction(num, den);
+
+    return {
+      text: `${A} \\(\\frac{1}{2}\\) × ${B} \\(\\frac{1}{2}\\) =`,
+      answer: { type: "frac", value: simp }
+    };
+  }
+
+  if (form === 2) {
+    // (A 3/5) × (A 2/5)
+    const A = randInt(2, 12);
+    const f1 = toImproper(A, 3, 5);
+    const f2 = toImproper(A, 2, 5);
+
+    const num = f1.num * f2.num;
+    const den = 25;
+    const simp = simplifyFraction(num, den);
+
+    return {
+      text: `${A} \\(\\frac{3}{5}\\) × ${A} \\(\\frac{2}{5}\\) =`,
+      answer: { type: "frac", value: simp }
+    };
+  }
+
+  // form 3: (A 2/3) × B with B multiple of 3
+  const A = randInt(2, 15);
+  const B = 3 * randInt(2, 10);
+  const f = toImproper(A, 2, 3); // (3A+2)/3
+
+  const num = f.num * B;
+  const den = 3;
+  const simp = simplifyFraction(num, den);
+
+  return {
+    text: `${A} \\(\\frac{2}{3}\\) × ${B} =`,
+    answer: { type: "frac", value: simp }
+  };
+}
+
+function generateQ5() {
+  const form = randInt(1, 2);
+
+  if (form === 1) {
+    // Sum from X to Y
+    const X = randInt(3, 15);
+    const Y = X +  randInt(5, 15);
+    const n = Y - X + 1;
+    const sum = n * (X + Y) / 2;
+
+    return {
+      text: `Find the sum of the integers from ${X} to ${Y}, inclusive.`,
+      answer: { type: "int", value: sum }
+    };
+  }
+
+  // form 2: a, a+d, ..., a+nd
+  const a = randInt(3, 20);
+  const d = randInt(1, 5);
+  const n = randInt(4, 10);
+  const last = a + n * d;
+  const sum = (n + 1) * (a + last) / 2;
+
+  return {
+    text: `Find the sum: ${a}, ${a + d}, ${a + 2 * d}, ..., ${last}.`,
+    answer: { type: "int", value: sum }
+  };
+}
+
+function generateQ6() {
+  const form = randInt(1, 3);
+
+  if (form === 1) {
+    // a.bcd is __% of N
+    const N = randInt(100, 999);
+    const p = randInt(2, 30); // percent
+    const val = N * p / 100;
+    const scaled = (val * 100) | 0;
+    const display = (scaled / 100).toFixed(2);
+
+    return {
+      text: `${display} is what percent of ${N}?`,
+      answer: { type: "int", value: p }
+    };
+  }
+
+  if (form === 2) {
+    // __% of N is M
+    const N = randInt(50, 500);
+    const p = randInt(5, 40);
+    const M = N * p / 100;
+
+    return {
+      text: `What percent of ${N} is ${M}?`,
+      answer: { type: "int", value: p }
+    };
+  }
+
+  // form 3: (a-b) + 2×(1+2):3! style
+  const a = randInt(5, 15);
+  const b = randInt(1, 5);
+  const c = randInt(1, 4);
+  const d = randInt(1, 4);
+  const fact = randInt(3, 5);
+
+  let f = 1;
+  for (let i = 2; i <= fact; i++) f *= i;
+
+  const val = (a - b) + 2 * (c + d) / f;
+
+  return {
+    text: `(${a} - ${b}) + 2 × (${c} + ${d}) : ${fact}! =`,
+    answer: { type: "int", value: val }
+  };
+}
+
+function generateQ7() {
+  const form = randInt(1, 3);
+
+  if (form === 1) {
+    const a = randInt(5, 15);
+    const b = randInt(1, 5);
+    const c = randInt(2, 6);
+    const d = randInt(1, 5);
+    const e = randInt(1, 5);
+
+    const val = (a - b) + c * (d + e);
+    return {
+      text: `(${a} - ${b}) + ${c} × (${d} + ${e}) =`,
+      answer: { type: "int", value: val }
+    };
+  }
+
+  if (form === 2) {
+    const a = randInt(3, 9);
+    const b = randInt(1, a - 1);
+    const val = a * a - b * b;
+    return {
+      text: `${a}² - ${b}² =`,
+      answer: { type: "int", value: val }
+    };
+  }
+
+  // form 3: (a+b)² - (a-b)² = 4ab
+  const a = randInt(2, 9);
+  const b = randInt(2, 9);
+  const val = 4 * a * b;
+  return {
+    text: `(${a} + ${b})² - (${a} - ${b})² =`,
+    answer: { type: "int", value: val }
+  };
+}
+
+function generateQ8() {
+  const form = randInt(1, 3);
+
+  if (form === 1) {
+    const a = randInt(10, 60);
+    const b = randInt(10, 60);
+    const g = gcd(a, b);
+    const l = (a * b) / g;
+    return {
+      text: `GCD(${a}, ${b}) + LCM(${a}, ${b}) =`,
+      answer: { type: "int", value: g + l }
+    };
+  }
+
+  if (form === 2) {
+    // sum of divisors of n where n is small
+    const n = randInt(10, 60);
+    let sum = 0;
+    for (let d = 1; d <= n; d++) if (n % d === 0) sum += d;
+    return {
+      text: `Find the sum of the positive divisors of ${n}.`,
+      answer: { type: "int", value: sum }
+    };
+  }
+
+  // form 3: product of divisors of n (n is perfect square or prime power)
+  const p = [2, 3, 5, 7, 11][randInt(0, 4)];
+  const k = randInt(2, 4);
+  const n = p ** k;
+  // product of divisors of p^k is p^{k·2^{k-1}}
+  const numDiv = k + 1;
+  const exponent = (numDiv / 2) * n; // but this gets huge; keep k small
+  // Instead, we can just compute directly:
+  let prod = 1n;
+  for (let d = 1; d <= n; d++) {
+    if (n % d === 0) prod *= BigInt(d);
+  }
+
+  return {
+    text: `Find the product of the positive divisors of ${n}.`,
+    answer: { type: "int", value: Number(prod) } // careful: may overflow; keep n small
+  };
+}
+
+function generateQ9() {
+  const form = randInt(1, 2);
+
+  if (form === 1) {
+    const d = randInt(7, 25);
+    const q = randInt(2, 15);
+    const r = randInt(1, d - 1);
+    const n = d * q + r;
+
+    return {
+      text: `${n} : ${d} = (mixed number)`,
+      answer: { type: "frac", value: { num: n, den: d } }
+    };
+  }
+
+  // form 2: abc : de with small remainder
+  const d = randInt(7, 30);
+  const q = randInt(2, 20);
+  const r = randInt(1, 9);
+  const n = d * q + r;
+
+  return {
+    text: `${n} : ${d} = (mixed number)`,
+    answer: { type: "frac", value: { num: n, den: d } }
+  };
+}
+
+function generateQ10() {
+  const form = randInt(1, 2);
+
+  if (form === 1) {
+    // abcd × ef + ghij
+    const abcd = randInt(2000, 9000);
+    const ef = randInt(12, 49);
+    const ghij = randInt(1000, 9000);
+
+    const exact = abcd * ef + ghij;
+
+    return {
+      text: `\\( ${abcd} \\times ${ef} + ${ghij} \\)`,
+      answer: { type: "int", value: exact } // you'll treat as starred approx in UI
+    };
+  }
+
+  // form 2: abcd × (ef + gh)
+  const abcd = randInt(2000, 9000);
+  const ef = randInt(20, 60);
+  const gh = randInt(20, 60);
+  const sum = ef + gh;
+  const exact = abcd * sum;
+
+  return {
+    text: `\\( ${abcd} \\times (${ef} + ${gh}) \\)`,
+    answer: { type: "int", value: exact }
+  };
+}
+
+
+function generateQuestion(n) {
+  return questionGenerators[n]();
+}
+
+const questionGenerators = {
+  1: generateQ1,
+  2: generateQ2,
+  3: generateQ3,
+  4: generateQ4,
+  5: generateQ5,
+  6: generateQ6,
+  7: generateQ7,
+  8: generateQ8,
+  9: generateQ9,
+  10: generateQ10
+};
+
+/****************************************************
+ * UIL TEST GENERATOR (1–80)
+ ****************************************************/
+function buildProblemText(n) {
+  // If we have a generator for this question, use it.
+  if (questionGenerators[n]) {
+    const q = questionGenerators[n]();
+    return {
+      text: q.text.replace(/^\\\(/, "").replace(/\\\)$/, ""),
+      answer: q.answer
+    };
+  }
+
+  // Placeholder for not-yet-implemented questions
+  return {
+    text: "Problem not yet implemented.",
+    answer: null
+  };
+}
+
+function formatAnswer(n, ans) {
+  if (!ans) return `(not implemented)`;
+  if (ans.type === "int") return `${ans.value}`;
+  if (ans.type === "frac") {
+    const s = simplifyFraction(ans.value.num, ans.value.den);
+    if (s.den === 1) return `${s.num}`;
+    return `${s.num}/${s.den}`;
+  }
+  return `?`;
+}
+
+function generateFullTest() {
+  const ranges = {
+    "col-1-17": [1, 17],
+    "col-18-34": [18, 34],
+    "col-35-56": [35, 56],
+    "col-57-80": [57, 80]
+  };
+
+  const answerKey = [];
+
+  Object.entries(ranges).forEach(([id, [start, end]]) => {
+    const col = document.getElementById(id);
+    col.innerHTML = "";
+    for (let n = start; n <= end; n++) {
+      const { text, answer } = buildProblemText(n);
+      const div = document.createElement("div");
+      div.className = "uil-problem";
+      div.innerHTML = `<span class="uil-problem-number">(${n})</span> ${text}`;
+      col.appendChild(div);
+
+      answerKey.push({
+        n,
+        ans: formatAnswer(n, answer)
+      });
+    }
+  });
+
+  // Build answer key display
+  const ak = document.getElementById("answer-key-list");
+  ak.innerHTML = "";
+  answerKey.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "answer-key-item";
+    div.textContent = `(${item.n}) ${item.ans}`;
+    ak.appendChild(div);
+  });
+}
+
+
+
 /****************************************************
  * EVENT LISTENERS
  ****************************************************/
@@ -504,5 +1059,21 @@ window.addEventListener("DOMContentLoaded", () => {
     if (e.key === "Enter") submitTimed();
   });
 
+  // NEW: test generator buttons
+  document.getElementById("generate-test")?.addEventListener("click", () => {
+    generateFullTest();
+    renderMath();
+  });
+
+  document.getElementById("print-test")?.addEventListener("click", () => {
+    window.print();
+  });
+
+  document.getElementById("toggle-answer-key")?.addEventListener("click", () => {
+    const ak = document.getElementById("answer-key");
+    ak.classList.toggle("hidden");
+  });
+
   newProblem();
 });
+
