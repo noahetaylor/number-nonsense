@@ -279,5 +279,10 @@ button:hover {
   margin-right: 8px;
 }
 
+.uil-page, .uil-page * {
+  font-family: "Times New Roman", serif !important;
+}
+
+
 
 
