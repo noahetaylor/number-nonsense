@@ -809,7 +809,7 @@ function generateQ6() {
   const val = (a - b) + 2 * (c + d) / f;
 
   return {
-    text: `(${a} - ${b}) + 2 × (${c} + ${d}) : ${fact}! =`,
+    text: `(${a} - ${b}) + 2 × (${c} + ${d}) + ${fact}! =`,
     answer: { type: "int", value: val }
   };
 }
@@ -1168,9 +1168,6 @@ function generateFullTest() {
     "col-57-80": [57, 80]
   };
 
-  const starred = [10, 20, 30, 40, 50, 60, 70, 80];
-  const label = starred.includes(n) ? `*(${n})` : `(${n})`;
-
   const answerKey = [];
 
   Object.entries(ranges).forEach(([id, [start, end]]) => {
@@ -1178,6 +1175,10 @@ function generateFullTest() {
     col.innerHTML = "";
     for (let n = start; n <= end; n++) {
       const { text, answer } = buildProblemText(n);
+
+      const starred = [10, 20, 30, 40, 50, 60, 70, 80];
+      const label = starred.includes(n) ? `*(${n})` : `(${n})`;
+      
       const div = document.createElement("div");
       div.className = "uil-problem";
       div.innerHTML = `
