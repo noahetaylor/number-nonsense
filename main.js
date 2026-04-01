@@ -1033,13 +1033,15 @@ function generateQ16() {
 }
 
 function generateQ17() {
-  // metric grams ↔ ounces with prefixes, using 25 g ≈ 1 oz
+  // UIL-friendly metric prefixes
   const prefixes = [
+    { name: "milligrams", factor: 0.001 },
     { name: "centigrams", factor: 0.01 },
     { name: "decigrams", factor: 0.1 },
     { name: "grams", factor: 1 },
-    { name: "dekagrams", factor: 10 }
+    { name: "kilograms", factor: 1000 }
   ];
+
   const p = prefixes[randInt(0, prefixes.length - 1)];
 
   // choose a "given" metric amount that converts to a nice decimal oz
@@ -1056,6 +1058,7 @@ function generateQ17() {
     answer: { type: "decimal", value: metric2.toString() }
   };
 }
+
 
 function generateQ18() {
   // If a items cost $b.cc, what will n items cost?
