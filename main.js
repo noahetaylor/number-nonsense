@@ -771,9 +771,8 @@ function generateQ6() {
   const form = randInt(1, 3);
 
   if (form === 1) {
-    // a.bcd is __% of N
     const N = randInt(100, 999);
-    const p = randInt(2, 30); // percent
+    const p = randInt(2, 30);
     const val = N * p / 100;
     const scaled = (val * 100) | 0;
     const display = (scaled / 100).toFixed(2);
@@ -785,7 +784,6 @@ function generateQ6() {
   }
 
   if (form === 2) {
-    // __% of N is M
     const N = randInt(50, 500);
     const p = randInt(5, 40);
     const M = N * p / 100;
@@ -796,7 +794,7 @@ function generateQ6() {
     };
   }
 
-  // form 3: (a-b) + 2×(1+2):3! style
+  // FIXED: use ÷ instead of :
   const a = randInt(5, 15);
   const b = randInt(1, 5);
   const c = randInt(1, 4);
@@ -809,45 +807,32 @@ function generateQ6() {
   const val = (a - b) + 2 * (c + d) / f;
 
   return {
-    text: `(${a} - ${b}) + 2 × (${c} + ${d}) + ${fact}! =`,
+    text: `(${a} - ${b}) + 2 × (${c} + ${d}) ÷ ${fact}! =`,
     answer: { type: "int", value: val }
   };
 }
 
 function generateQ7() {
-  const form = randInt(1, 3);
+  const p = Math.random() < 0.5 ? 2 : 3;   // base 2 or 3
+  const k = randInt(3, 5);                 // exponent 3–5
+  const n = p ** k;
 
-  if (form === 1) {
-    const a = randInt(5, 15);
-    const b = randInt(1, 5);
-    const c = randInt(2, 6);
-    const d = randInt(1, 5);
-    const e = randInt(1, 5);
+  const proper = Math.random() < 0.5;      // 50% proper divisors
 
-    const val = (a - b) + c * (d + e);
-    return {
-      text: `(${a} - ${b}) + ${c} × (${d} + ${e}) =`,
-      answer: { type: "int", value: val }
-    };
+  let exponent;
+  if (proper) {
+    exponent = (k - 1) / 2;
+  } else {
+    exponent = (k + 1) / 2;
   }
 
-  if (form === 2) {
-    const a = randInt(3, 9);
-    const b = randInt(1, a - 1);
-    const val = a * a - b * b;
-    return {
-      text: `${a}² - ${b}² =`,
-      answer: { type: "int", value: val }
-    };
-  }
+  const result = n ** exponent;
 
-  // form 3: (a+b)² - (a-b)² = 4ab
-  const a = randInt(2, 9);
-  const b = randInt(2, 9);
-  const val = 4 * a * b;
   return {
-    text: `(${a} + ${b})² - (${a} - ${b})² =`,
-    answer: { type: "int", value: val }
+    text: proper
+      ? `Find the product of the proper divisors of ${n}.`
+      : `Find the product of the positive divisors of ${n}.`,
+    answer: { type: "int", value: result }
   };
 }
 
@@ -982,14 +967,32 @@ function generateQ12() {
 }
 
 function generateQ13() {
-  // 222 × 37 style: rep-digit × (30+7)
-  const d = [2, 3, 4][randInt(0, 2)];
-  const rep = 111 * d; // 222, 333, 444
-  const k = randInt(3, 5); // 3x+7
-  const n2 = 10 * k + 7;
+  const form = randInt(1, 2);
+
+  // Option A — repdigit × (multiple of 37)
+  if (form === 1) {
+    const k = randInt(2, 5);      // 222, 333, 444, 555
+    const rep = 111 * k;
+    const m = randInt(1, 4);      // 37, 74, 111, 148
+    const mult = 37 * m;
+
+    return {
+      text: `${rep} × ${mult} =`,
+      answer: { type: "int", value: rep * mult }
+    };
+  }
+
+  // Option B — repdigit × (a/27)
+  const k = randInt(2, 5);
+  const rep = 111 * k;
+  const a = randInt(2, 6);
+  const num = rep * a;
+  const den = 27;
+  const simp = simplifyFraction(num, den);
+
   return {
-    text: `${rep} × ${n2} =`,
-    answer: { type: "int", value: rep * n2 }
+    text: `${rep} × ${a}/27 =`,
+    answer: { type: "frac", value: simp }
   };
 }
 
@@ -1005,7 +1008,6 @@ function generateQ14() {
 }
 
 function generateQ15() {
-  // a^2 - b^2 = m x, with nice factorization
   const a = randInt(10, 25);
   const diff = [2, 4, 6][randInt(0, 2)];
   const b = a + diff;
@@ -1015,7 +1017,7 @@ function generateQ15() {
   const x = lhs / m;
 
   return {
-    text: `${a}² - ${b}² = ${m}x`,
+    text: `${a}² - ${b}² = ${m} × ____`,
     answer: { type: "int", value: x }
   };
 }
@@ -1169,20 +1171,21 @@ function generateFullTest() {
   };
 
   const answerKey = [];
+  const starred = [10, 20, 30, 40, 50, 60, 70, 80];
 
   Object.entries(ranges).forEach(([id, [start, end]]) => {
     const col = document.getElementById(id);
     col.innerHTML = "";
+
     for (let n = start; n <= end; n++) {
       const { text, answer } = buildProblemText(n);
 
-      const starred = [10, 20, 30, 40, 50, 60, 70, 80];
       const label = starred.includes(n) ? `*(${n})` : `(${n})`;
-      
+
       const div = document.createElement("div");
       div.className = "uil-problem";
       div.innerHTML = `
-        <span class="uil-problem-number">(${n})</span> 
+        <span class="uil-problem-number">${label}</span>
         <span class="uil-problem-text">${text}</span>
         <span class="uil-blank"></span>
       `;
@@ -1195,6 +1198,17 @@ function generateFullTest() {
       });
     }
   });
+
+  const ak = document.getElementById("answer-key-list");
+  ak.innerHTML = "";
+  answerKey.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "answer-key-item";
+    div.textContent = `(${item.n}) ${item.ans}`;
+    ak.appendChild(div);
+  });
+}
+
 
   // Build answer key display
   const ak = document.getElementById("answer-key-list");
