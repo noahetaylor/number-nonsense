@@ -952,6 +952,153 @@ function generateQ10() {
   };
 }
 
+function generateQ11() {
+  // 1 + 3 × (6 - 10) + (15 - 21) style
+  const a = randInt(1, 5);
+  const b = randInt(2, 6);
+  const c = randInt(6, 12);
+  const d = c + randInt(2, 5);
+  const e = randInt(10, 20);
+  const f = e + randInt(3, 8);
+
+  const val = a + b * (c - d) + (e - f);
+  return {
+    text: `${a} + ${b} × (${c} - ${d}) + (${e} - ${f}) =`,
+    answer: { type: "int", value: val }
+  };
+}
+
+function generateQ12() {
+  // 124 × 13 style: (100a + b) × (10 + c)
+  const a = randInt(1, 9);
+  const b = randInt(20, 49); // keeps it "124-ish"
+  const c = randInt(2, 5);
+  const n1 = 100 * a + b;
+  const n2 = 10 + c;
+  return {
+    text: `${n1} × ${n2} =`,
+    answer: { type: "int", value: n1 * n2 }
+  };
+}
+
+function generateQ13() {
+  // 222 × 37 style: rep-digit × (30+7)
+  const d = [2, 3, 4][randInt(0, 2)];
+  const rep = 111 * d; // 222, 333, 444
+  const k = randInt(3, 5); // 3x+7
+  const n2 = 10 * k + 7;
+  return {
+    text: `${rep} × ${n2} =`,
+    answer: { type: "int", value: rep * n2 }
+  };
+}
+
+function generateQ14() {
+  // k% of N is
+  const k = randInt(5, 40);
+  const N = 25 * randInt(4, 40); // multiple of 25
+  const val = N * k / 100;
+  return {
+    text: `${k}% of ${N} is`,
+    answer: { type: "int", value: val }
+  };
+}
+
+function generateQ15() {
+  // a^2 - b^2 = m x, with nice factorization
+  const a = randInt(10, 25);
+  const diff = [2, 4, 6][randInt(0, 2)];
+  const b = a + diff;
+  const m = randInt(2, 6);
+
+  const lhs = a * a - b * b; // (a-b)(a+b)
+  const x = lhs / m;
+
+  return {
+    text: `${a}² - ${b}² = ${m}x`,
+    answer: { type: "int", value: x }
+  };
+}
+
+function generateQ16() {
+  // abcd × 4 + 16 style
+  const base = 25 * randInt(40, 120); // multiple of 25
+  const val = base * 4 + 16;
+  return {
+    text: `${base} × 4 + 16 =`,
+    answer: { type: "int", value: val }
+  };
+}
+
+function generateQ17() {
+  // metric grams ↔ ounces with prefixes, using 25 g ≈ 1 oz
+  const prefixes = [
+    { name: "centigrams", factor: 0.01 },
+    { name: "decigrams", factor: 0.1 },
+    { name: "grams", factor: 1 },
+    { name: "dekagrams", factor: 10 }
+  ];
+  const p = prefixes[randInt(0, prefixes.length - 1)];
+
+  // choose a "given" metric amount that converts to a nice decimal oz
+  const metric1 = 2 * randInt(1, 5); // 2,4,6,8,10 units
+  const grams1 = metric1 * p.factor;
+  const oz1 = grams1 / 25; // using 25 g per oz
+
+  const oz2 = 2 * randInt(3, 8); // 6,8,10,...,16 oz
+  const grams2 = oz2 * 25;
+  const metric2 = grams2 / p.factor;
+
+  return {
+    text: `${metric1} ${p.name} = ${oz1.toFixed(2)} oz and ${oz2} oz =`,
+    answer: { type: "decimal", value: metric2.toString() }
+  };
+}
+
+function generateQ18() {
+  // If a items cost $b.cc, what will n items cost?
+  const a = randInt(3, 7);
+  const pricePer = randInt(150, 450) / 100; // $1.50–$4.50
+  const totalA = a * pricePer;
+  const n = randInt(8, 15);
+
+  const totalN = n * pricePer;
+  return {
+    text: `If ${a} medals cost $${totalA.toFixed(2)}, what will ${n} medals cost? $`,
+    answer: { type: "decimal", value: totalN.toFixed(2) }
+  };
+}
+
+function generateQ19() {
+  // sum of LCM and GCD of two numbers
+  const a = randInt(12, 40);
+  const b = randInt(12, 40);
+  const g = gcd(a, b);
+  const l = (a * b) / g;
+  return {
+    text: `The sum of the LCM of ${a} and ${b} and the GCD of ${a} and ${b} is`,
+    answer: { type: "int", value: g + l }
+  };
+}
+
+function generateQ20() {
+  // * starred: ab × cd + efg, cap at 500,000
+  let ab, cd, efg, exact;
+  while (true) {
+    ab = randInt(120, 450);
+    cd = randInt(120, 450);
+    efg = randInt(500, 5000);
+    exact = ab * cd + efg;
+    if (exact <= 500000) break;
+  }
+
+  return {
+    text: `\\( ${ab} \\times ${cd} + ${efg} \\)`,
+    answer: { type: "int", value: exact } // treat as starred approx in scoring
+  };
+}
+
+
 
 function generateQuestion(n) {
   return questionGenerators[n]();
@@ -967,8 +1114,19 @@ const questionGenerators = {
   7: generateQ7,
   8: generateQ8,
   9: generateQ9,
-  10: generateQ10
+  10: generateQ10,
+  11: generateQ11,
+  12: generateQ12,
+  13: generateQ13,
+  14: generateQ14,
+  15: generateQ15,
+  16: generateQ16,
+  17: generateQ17,
+  18: generateQ18,
+  19: generateQ19,
+  20: generateQ20
 };
+
 
 /****************************************************
  * UIL TEST GENERATOR (1–80)
