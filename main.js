@@ -1168,6 +1168,9 @@ function generateFullTest() {
     "col-57-80": [57, 80]
   };
 
+  const starred = [10, 20, 30, 40, 50, 60, 70, 80];
+  const label = starred.includes(n) ? `*(${n})` : `(${n})`;
+
   const answerKey = [];
 
   Object.entries(ranges).forEach(([id, [start, end]]) => {
