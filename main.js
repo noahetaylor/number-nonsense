@@ -1171,15 +1171,15 @@ function generateFullTest() {
   };
 
   const answerKey = [];
-  const starred = [10, 20, 30, 40, 50, 60, 70, 80];
-
+  
   Object.entries(ranges).forEach(([id, [start, end]]) => {
     const col = document.getElementById(id);
     col.innerHTML = "";
 
     for (let n = start; n <= end; n++) {
       const { text, answer } = buildProblemText(n);
-
+      
+      const starred = [10, 20, 30, 40, 50, 60, 70, 80];
       const label = starred.includes(n) ? `*(${n})` : `(${n})`;
 
       const div = document.createElement("div");
@@ -1209,17 +1209,6 @@ function generateFullTest() {
   });
 }
 
-
-  // Build answer key display
-  const ak = document.getElementById("answer-key-list");
-  ak.innerHTML = "";
-  answerKey.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "answer-key-item";
-    div.textContent = `(${item.n}) ${item.ans}`;
-    ak.appendChild(div);
-  });
-}
 
 
 
