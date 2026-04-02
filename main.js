@@ -290,8 +290,8 @@ function generateCurveball6() {
   } else {
     // y = x + c
     if (!askHK) {
-      // h - k = -p + q + 2c
-      const val = -p + q + 2 * c;
+      // h - k = -p + q - 2c
+      const val = -p + q - 2 * c;
       text = `The point (${p}, ${q}) is reflected across the line \\(y = x ${c>=0?'+':''}${c}\\). Find \\(h-k\\).`;
       answer = { type: "int", value: val };
     } else {
@@ -394,7 +394,7 @@ const explanations = `
 
 <p><strong>For the line</strong> \\(y = x + c\\):</p>
 <ul>
-  <li>\\(h-k = -p + q + 2c\\)</li>
+  <li>\\(h-k = -p + q - 2c\\)</li>
   <li>\\(h+k = p + q\\)</li>
 </ul>
 `;
